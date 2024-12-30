@@ -1,0 +1,482 @@
+@import "./variables";
+
+//Width & height
+$lenght_kinds: height, width;
+$lenght_vals: min, max, fit;
+$lenght_copies: 100;
+
+@for $i from 1 through $lenght_copies {
+  @each $kind in $lenght_kinds {
+    .#{str-slice($kind, 0, 1)}-#{$i} {
+      #{$kind}: $i * 1%;
+    }
+
+    .#{str-slice($kind, 0, 1)}-#{$i}-px {
+      #{$kind}: $i + px;
+    }
+
+    .max-#{str-slice($kind, 0, 1)}-#{$i}-px {
+      max-#{$kind}: $i + px;
+    }
+
+    .min-#{str-slice($kind, 0, 1)}-#{$i}-px {
+      min-#{$kind}: $i + px;
+    }
+  }
+}
+
+@each $val in $lenght_vals {
+  @each $kind in $lenght_kinds {
+    .#{str-slice($kind, 0, 1)}-#{$val} {
+      #{$kind}: #{$val}-content;
+    }
+  }
+}
+
+@each $kind in $lenght_kinds {
+  .#{str-slice($kind, 0, 1)}-auto {
+    #{$kind}: auto;
+  }
+}
+
+.h-100-vh {
+  height: 100vh;
+}
+
+//Position
+$positions: static, relative, absolute, fixed, sticky;
+
+@each $pos in $positions {
+  .p-#{$pos} {
+    position: $pos;
+  }
+}
+
+//displays
+$displays: none, block, inline, inline-block, inline-flex, inline-grid,
+  inline-table, flex, grid, table;
+
+@each $display in $displays {
+  .d-#{$display} {
+    display: $display;
+  }
+
+  @media screen and (max-width: $sm) {
+    .sm\:d-#{$display} {
+      display: $display !important;
+    }
+  }
+
+  @media screen and (max-width: $lg) {
+    .lg\:d-#{$display} {
+      display: $display !important;
+    }
+  }
+}
+
+//flex-direction
+.f-dir-col {
+  flex-direction: column;
+}
+
+.f-dir-row {
+  flex-direction: row;
+}
+
+.f-dir-col-r {
+  flex-direction: column-reverse;
+}
+
+.f-dir-row-r {
+  flex-direction: row-reverse;
+}
+
+//flex-direction
+.f-nowrap {
+  flex-wrap: nowrap;
+}
+
+.f-wrap {
+  flex-wrap: wrap;
+}
+
+.f-wrap-r {
+  flex-wrap: wrap-reverse;
+}
+
+//gab
+@for $i from 1 through 20 {
+  .g-#{$i} {
+    gap: $i + px;
+  }
+
+  .gr-#{$i} {
+    row-gap: $i + px;
+  }
+
+  .gc-#{$i} {
+    column-gap: $i + px;
+  }
+}
+
+//justify-content
+$aligment_kinds: justify, align;
+$aligment_types: content, self, items;
+$aligment_vals: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  around: space-around,
+  between: space-between,
+  evenly: space-evenly,
+  line: baseline,
+);
+
+@each $kind in $aligment_kinds {
+  @each $type in $aligment_types {
+    @each $name, $val in $aligment_vals {
+      @if not($type !=content and index([around between evenly], $name)) {
+        .#{str-slice($kind, 0, 1)}-#{$type}-#{$name} {
+          #{$kind}-#{$type}: $val;
+        }
+      }
+    }
+  }
+}
+
+//center
+.f-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.g-center {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.a-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.c-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+//padding & margin
+$spacing_sizes: "", "top", "bottom", "left", "right", "x", "y";
+$spacing_kinds: "padding", "margin";
+$spacing_copies: 100;
+
+@mixin spacing($kind, $size, $value, $unit) {
+  .#{str-slice($kind, 0, 1)}#{str-slice($size, 0, 1)}-#{$value} {
+    @if $size == "x" {
+      #{$kind}-left: #{$value}+#{$unit} !important;
+      #{$kind}-right: #{$value}+#{$unit} !important;
+    } @else if $size == "y" {
+      #{$kind}-top: #{$value}+#{$unit} !important;
+      #{$kind}-bottom: #{$value}+#{$unit} !important;
+    } @else {
+      @if $size == "" {
+        #{$kind}#{$size}: #{$value}+#{$unit} !important;
+      } @else {
+        #{$kind}-#{$size}: #{$value}+#{$unit} !important;
+      }
+    }
+  }
+}
+
+@each $kind in $spacing_kinds {
+  @each $size in $spacing_sizes {
+    @for $i from 0 through $spacing_copies {
+      @include spacing($kind, $size, $i, px);
+    }
+
+    @include spacing($kind, $size, auto, "");
+  }
+}
+
+.container {
+  padding-left: 5% !important;
+  padding-right: 5% !important;
+}
+
+//cursor
+$cursors: auto, none, pointer;
+
+@each $cursor in $cursors {
+  .c-#{$cursor} {
+    cursor: $cursor;
+  }
+}
+
+//over-flow
+$of_kinds: "", -x, -y;
+$of_vals: auto, hidden, scroll, overlay;
+
+@each $kind in $of_kinds {
+  @each $val in $of_vals {
+    .of#{$kind}-#{$val} {
+      overflow#{$kind}: $val;
+    }
+  }
+}
+
+.of-visible {
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+//border-radius
+.radius {
+  border-radius: $radius;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+//background && color
+$color_vals: (
+  "light-0": $light-0,
+  "light-1": $light-1,
+  "light-2": $light-2,
+  "light-3": $light-3,
+  "light-4": $light-4,
+  "light-5": $light-5,
+  "light-6": $light-6,
+  "light-7": $light-7,
+  "dark": $dark,
+  "main": $main,
+  "red": $support,
+  "orange": $hate,
+  "green": $green,
+);
+
+@each $name, $val in $color_vals {
+  .bg-#{$name} {
+    background: $val;
+  }
+
+  .color-#{$name} {
+    color: $val;
+  }
+}
+
+//font-weight
+$weights: normal, bold, bolder, lighter;
+
+@each $weight in $weights {
+  .font-#{$weight} {
+    font-weight: $weight;
+  }
+}
+
+//text-align
+$text_aligns: left, right, center;
+
+@each $align in $text_aligns {
+  .t-align-#{$align} {
+    text-align: $align;
+  }
+}
+
+//line-height
+@for $i from 1 through 5 {
+  .line-height-#{$i} {
+    line-height: $i;
+  }
+}
+
+//font-size
+@for $i from 1 through 32 {
+  .font-#{$i * 2} {
+    font-size: calc(1rem / 8 * $i);
+  }
+}
+
+//text-align
+.shadow-bold {
+  box-shadow: 0px 1px 2px $border;
+}
+
+.shadow-bolder {
+  box-shadow: 0px 2px 4px $border;
+}
+
+.shadow-bold-r {
+  box-shadow: 0px -1px 2px $border;
+}
+
+.shadow-bolder-r {
+  box-shadow: 0px -2px 4px $border;
+}
+
+//border
+$border_dirs: "", top, bottom, left, right;
+$border_colors: (
+  light-0: $light-0,
+  border: $border,
+  main: $main,
+  "red": $support,
+);
+$border_copies: 20;
+
+@for $i from 0 through 5 {
+  @each $name, $color in $border_colors {
+    @each $dir in $border_dirs {
+      @if $color ==$border {
+        .b#{str-slice($dir, 0, 1)}-#{$i} {
+          @if $dir == "" {
+            border#{$dir}: $i + px solid $color !important;
+          } @else {
+            border-#{$dir}: $i + px solid $color !important;
+          }
+        }
+      } @else {
+        .b#{str-slice($dir, 0, 1)}-#{$i}-#{$name} {
+          @if $dir == "" {
+            border#{$dir}: $i + px solid $color !important;
+          } @else {
+            border-#{$dir}: $i + px solid $color !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $sm) {
+  .sm\:p-0 {
+    padding: 0 !important;
+  }
+
+  .sm\:m-0 {
+    margin: 0 !important;
+  }
+}
+
+@media screen and (max-width: $lg) {
+  .lg\:p-0 {
+    padding: 0 !important;
+  }
+
+  .lg\:m-0 {
+    margin: 0 !important;
+  }
+}
+
+//outline
+@for $i from 1 through 5 {
+  .ol-#{$i} {
+    outline: $i + px solid $border;
+  }
+
+  .ol-#{$i}-light-0 {
+    outline: $i + px solid $light-0;
+  }
+
+  .ol-#{$i}-main {
+    outline: $i + px solid $main;
+  }
+}
+
+//top, bottom, left & right
+@for $i from -20 through 20 {
+  $m: "";
+
+  @if $i < 0 {
+    $m: "m";
+  }
+
+  .top-#{$m}#{$i} {
+    top: $i + px;
+  }
+
+  .bottom-#{$m}#{$i} {
+    bottom: $i + px;
+  }
+
+  .left-#{$m}#{$i} {
+    left: $i + px;
+  }
+
+  .right-#{$m}#{$i} {
+    right: $i + px;
+  }
+}
+
+//top, bottom, left & right
+@for $i from 1 through 10 {
+  .index-#{$i} {
+    z-index: #{$i * 10 + 1000};
+  }
+}
+
+//grid system
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 calc(100% * $i / 12);
+    width: calc(100% * $i / 12);
+  }
+
+  .offset-#{$i} {
+    margin-left: calc(100% * $i / 12);
+  }
+
+  @media screen and (max-width: $sm) {
+    .sm\:col-#{$i} {
+      flex: 0 0 calc(100% * $i / 12);
+      width: calc(100% * $i / 12);
+    }
+
+    .sm\:offset-#{$i} {
+      margin-left: calc(100% * $i / 12);
+    }
+  }
+
+  @media screen and (max-width: $lg) {
+    .lg\:col-#{$i} {
+      flex: 0 0 calc(100% * $i / 12);
+      width: calc(100% * $i / 12);
+    }
+
+    .lg\:offset-#{$i} {
+      margin-left: calc(100% * $i / 12);
+    }
+  }
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.col-ad {
+  flex-basis: 0;
+  flex-grow: 1;
+  min-width: 50%;
+}
+
+.word-break-all {
+  word-break: break-all;
+}
+
+.fit-cover {
+  object-fit: cover;
+}
+
+.no-space {
+  white-space: nowrap;
+}
